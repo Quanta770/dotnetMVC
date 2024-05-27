@@ -1,0 +1,57 @@
+﻿@model Product
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Add Book</h2>
+            <hr />
+        </div>
+        <input asp-for="Id" hidden />
+        <div class="mb-3 row p-1">
+            <label asp-for="Title" class="p-0"></label>
+            <input asp-for="Title" class="form-control" value="@Model.Title" readonly />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="ISBN" class="p-0"></label>
+            <input asp-for="ISBN" class="form-control" readonly value="@Model.ISBN" />
+            <span asp-validation-for="ISBN" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Author" class="p-0"></label>
+            <input asp-for="Author" class="form-control" readonly value="@Model.Author" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Description" class="p-0"></label>
+            <input asp-for="Description" class="form-control" readonly value="@Model.Description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Publisher" class="p-0"></label>
+            <input asp-for="Publisher" class="form-control" readonly value="@Model.Publisher" />
+            <span asp-validation-for="Publisher" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="ListPrice" class="p-0"></label>
+            <input asp-for="ListPrice" class="form-control" readonly value="@Model.ListPrice" />
+            <span asp-validation-for="ListPrice" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Delete</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary form-control">Back</a>
+
+            </div>
+        </div>
+    </div>
+
+</form>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

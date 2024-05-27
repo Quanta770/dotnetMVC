@@ -1,0 +1,71 @@
+﻿@model ProductViewModel
+
+<form method="post">
+    <input asp-for="Product.Id" hidden />
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">@(Model.Product.Id!=0?"Update":"Create") Product</h2>
+            <hr/>
+        </div>
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.Title" class="p-0"></label>
+            <input asp-for="Product.Title" class="form-control" />
+            <span asp-validation-for="Product.Title" class="text-danger"></span>
+        </div>
+       
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.ISBN" class="p-0"></label>
+            <input asp-for="Product.ISBN" class="form-control" />
+            <span asp-validation-for="Product.ISBN" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.Author" class="p-0"></label>
+            <input asp-for="Product.Author" class="form-control" />
+            <span asp-validation-for="Product.Author" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.Description" class="p-0"></label>
+            <input asp-for="Product.Description" class="form-control" />
+            <span asp-validation-for="Product.Description" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.Publisher" class="p-0"></label>
+            <input asp-for="Product.Publisher" class="form-control" />
+            <span asp-validation-for="Product.Publisher" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.CategoryId" class="p-0"></label>
+            <select asp-for="Product.CategoryId" asp-items="@Model.CategoryList" class="form-select">
+                <option disabled selected>--Select Category--</option>
+            </select>
+            <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.ListPrice" class="p-0"></label>
+            <input asp-for="Product.ListPrice" class="form-control" />
+            <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-3">
+                @if(Model.Product.Id!=0){
+                    <button type="submit" class="btn btn-primary form-control">Update</button>
+
+                }else{
+                    <button type="submit" class="btn btn-primary form-control">Create</button>
+
+                }
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary form-control">Back</a>
+
+            </div>
+        </div>
+     </div>    
+
+</form>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
