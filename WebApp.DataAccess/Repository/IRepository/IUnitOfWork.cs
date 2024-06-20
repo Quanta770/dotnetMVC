@@ -10,6 +10,8 @@ namespace WebApp.DataAccess.Repository.IRepository
     {
         ICategoryRepository Category { get; }
         IProductRepository Product { get; }
+        IUsersRepository Users { get; }
+
         void Save();
     }
 }

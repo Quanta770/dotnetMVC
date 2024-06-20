@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WebApp.DataAccess.Repository;
+using WebApp.DataAccess.Repository.IRepository;
 using WebApp.Models;
 
 namespace WebApp_MVC.Areas.Customer.Controllers
@@ -8,16 +10,28 @@ namespace WebApp_MVC.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
+            return View(productList);
         }
+
+        //Details page only show 1 product
+        //argument name must be same as one used in asp-route-{arg name}
+        public IActionResult Details(int productId)
+        {
+            Product product = _unitOfWork.Product.Get(x=>x.Id == productId ,includeProperties: "Category");
+            return View(product);
+        }
+
 
         public IActionResult Privacy()
         {

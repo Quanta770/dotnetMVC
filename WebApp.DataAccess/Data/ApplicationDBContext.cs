@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Models;
 
 namespace WebApp.DataAccess.Data
 {
-    public class ApplicationDBContext : DbContext
+    public class ApplicationDBContext : IdentityDbContext<IdentityUser>
     {
         // contructor
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
@@ -14,9 +16,13 @@ namespace WebApp.DataAccess.Data
         //table name is method name
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //keys of identity table are mapped in OnModelCreating 
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Category>().HasData(
                 
                 new Category { Id = 1, Name = "Action", DisplayOrder = 1},
@@ -35,7 +41,8 @@ namespace WebApp.DataAccess.Data
                     ISBN = "SWD9999001",
                     Publisher = "ABC",
                     ListPrice = 99,
-                    CategoryId = 13
+                    CategoryId = 13,
+                    ImageURL=""
                 },
                 new Product
                 {
@@ -46,7 +53,8 @@ namespace WebApp.DataAccess.Data
                     ISBN = "CAW777777701",
                     Publisher = "ABC",
                     ListPrice = 40,
-                    CategoryId = 13
+                    CategoryId = 13,
+                    ImageURL = ""
 
                 },
                 new Product
@@ -58,7 +66,8 @@ namespace WebApp.DataAccess.Data
                     ISBN = "RITO5555501",
                     Publisher = "ABC",
                     ListPrice = 55,
-                    CategoryId = 13
+                    CategoryId = 13,
+                    ImageURL = ""
                 },
                 new Product
                 {
@@ -69,7 +78,8 @@ namespace WebApp.DataAccess.Data
                     ISBN = "WS3333333301",
                     Publisher = "ABC",
                     ListPrice = 70,
-                    CategoryId = 13
+                    CategoryId = 13,
+                    ImageURL = ""
                 },
                 new Product
                 {
@@ -80,7 +90,8 @@ namespace WebApp.DataAccess.Data
                     ISBN = "SOTJ1111111101",
                     Publisher = "ABC",
                     ListPrice = 30,
-                    CategoryId = 13
+                    CategoryId = 13,
+                    ImageURL = ""
                 },
                 new Product
                 {
@@ -91,7 +102,8 @@ namespace WebApp.DataAccess.Data
                     ISBN = "FOT000000001",
                     Publisher = "ABC",
                     ListPrice = 25,
-                    CategoryId = 13
+                    CategoryId = 13,
+                    ImageURL = ""
                 }
                 );
         }

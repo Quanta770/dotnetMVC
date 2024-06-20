@@ -13,6 +13,7 @@ namespace WebApp.DataAccess.Repository
     {
         public ICategoryRepository Category { get; set; }
         public IProductRepository Product { get; set; }
+        public IUsersRepository Users { get; set; }
 
         private ApplicationDBContext _dbContext;
         public UnitOfWork(ApplicationDBContext db)
@@ -20,6 +21,7 @@ namespace WebApp.DataAccess.Repository
             _dbContext = db;
             Category = new CategoryRepository(_dbContext);
             Product = new ProductRepository(_dbContext);
+            Users = new UsersRepository(_dbContext);
         }
         public void Save()
         {

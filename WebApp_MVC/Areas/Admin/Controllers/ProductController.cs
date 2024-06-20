@@ -1,19 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.DataAccess.Repository.IRepository;
 using WebApp.Models;
 using WebApp.Models.ViewModels;
+using WebApp.Utility;
 
 namespace WebApp_MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles =SD.Role_Admin)]
     public class ProductController : Controller
     {
         //unitofwork
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        public readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+
         }
         public IActionResult Index()
         {
@@ -53,8 +59,29 @@ namespace WebApp_MVC.Areas.Admin.Controllers
         public IActionResult Upsert(ProductViewModel obj, IFormFile? file)
         {
            
-            if (ModelState.IsValid)
+           if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+                    if (!string.IsNullOrEmpty(obj.Product.ImageURL))
+                    {
+                        //there is image url - we are replacing with new image
+                        // need to remove old image
+                        var oldImagePath = Path.Combine(wwwRootPath, obj.Product.ImageURL.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+                    using (var filestream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
+                    {
+                        file.CopyTo(filestream);
+                    }
+                    obj.Product.ImageURL = @"\images\product\" + filename;
+                }
                 if (obj.Product.Id == 0)
                 {
                     //add
@@ -143,6 +170,8 @@ namespace WebApp_MVC.Areas.Admin.Controllers
         //    TempData["success"] = "Category deleted successfully.";
         //    return RedirectToAction("Index");
         //}
+
+
         #region API CALLS
         [HttpGet]
         public IActionResult GetAll()
@@ -150,7 +179,8 @@ namespace WebApp_MVC.Areas.Admin.Controllers
             List<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
             return Json(new { data = productList });
         }
-      
+
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
             Product product = _unitOfWork.Product.Get(x=>x.Id==id);
@@ -158,9 +188,11 @@ namespace WebApp_MVC.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
+
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageURL.TrimStart('\\'));
             _unitOfWork.Product.Remove(product);
             _unitOfWork.Save();
-            return Json(new { success = true, message = "Deleted" });
+            return Json(new { success = true, message = "Delete Successful" });
         }
 
         #endregion

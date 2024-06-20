@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using System.Net;
 using WebApp.DataAccess.Data;
+using WebApp.Utility;
 using WebApp.DataAccess.Repository.IRepository;
 using WebApp.Models;
 
 namespace WebApp_MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles =SD.Role_Admin)]
     public class CategoryController : Controller
     {   //dependency injection to provide ICategoryRepository
         //need to register service in dependency container in Program.cs

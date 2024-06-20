@@ -1,0 +1,35 @@
+﻿@model List<UserViewModel>
+
+
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>
+                User Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Role
+            </th>
+        <tbody>
+                @foreach (var obj in Model)
+                {
+                    <tr>
+                        <td>
+                                @obj.UserName
+                        </td>
+                        <td>
+                                @obj.Email
+                        </td>
+                        <td>
+                                @obj.Role
+                        </td>
+                    
+                    </tr>
+                }
+        </tbody>
+        </tr>
+    </table>
+</div>
